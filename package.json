@@ -1,0 +1,26 @@
+{
+  "name": "fastboot-redis-cache",
+  "version": "0.1.0",
+  "description": "A FastBoot App Server cache for Redis",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomdale/fastboot-redis-cache.git"
+  },
+  "keywords": [
+    "ember",
+    "fastboot",
+    "redis",
+    "cache"
+  ],
+  "author": "Tom Dale <tom@tomdale.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tomdale/fastboot-redis-cache/issues"
+  },
+  "homepage": "https://github.com/tomdale/fastboot-redis-cache#readme",
+  "dependencies": {
+    "redis": "^2.6.0-2"
+  }
+}
