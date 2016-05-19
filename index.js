@@ -13,6 +13,8 @@ class RedisCache {
 
     this.expiration = options.expiration || FIVE_MINUTES;
     this.connected = false;
+    this.cacheKey = typeof options.cacheKey === 'function' ?
+      options.cacheKey : (path) => path;
 
     client.on('error', error => {
       this.ui.writeLine(`redis error; err=${error}`);
@@ -30,12 +32,12 @@ class RedisCache {
   }
 
   fetch(path, request) {
-    if (!this.connected) {
-      return;
-    }
+    if (!this.connected) { return; }
+
+    let key = this.cacheKey(path, request);
 
     return new Promise((res, rej) => {
-      this.client.get(path, (err, reply) => {
+      this.client.get(key, (err, reply) => {
         if (err) {
           rej(err);
         } else {
@@ -45,10 +47,24 @@ class RedisCache {
     });
   }
 
-  put(path, body) {
+  put(path, body, response) {
+    if (!this.connected) { return; }
+
+    let request = response && response.req;
+    let key = this.cacheKey(path, request);
+
     return new Promise((res, rej) => {
+      let statusCode = response && response.statusCode;
+      let statusCodeStr = statusCode && (statusCode + '');
+
+      if (statusCodeStr && statusCodeStr.length &&
+         (statusCodeStr.charAt(0) === '4' || statusCodeStr.charAt(0) === '5')) {
+        res();
+        return;
+      }
+
       this.client.multi()
-        .set(path, body)
+        .set(key, body)
         .expire(path, this.expiration)
         .exec(err => {
           if (err) {
