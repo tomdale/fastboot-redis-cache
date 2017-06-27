@@ -1,6 +1,6 @@
 {
   "name": "fastboot-redis-cache",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A FastBoot App Server cache for Redis",
   "main": "index.js",
   "scripts": {
