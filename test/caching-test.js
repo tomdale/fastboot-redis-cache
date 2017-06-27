@@ -60,6 +60,15 @@ describe('caching tests', function() {
         expect(mockRedis['/']).to.be.undefined;
       });
     });
+    
+    it('does not cache 3xx error responses', function() {
+      let body = '<body>Redirect to </body>';
+      let mockResponse = { statusCode: 301 };
+
+      return cache.put('/', body, mockResponse).then(() => {
+        expect(mockRedis['/']).to.be.undefined;
+      });
+    });
   });
 
   describe('custom keys tests', function() {
